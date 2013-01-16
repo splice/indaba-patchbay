@@ -54,6 +54,7 @@ STYLE_OUT=${OUT}/build.css
 
 ${STYLE_OUT}: $(STYLE_FILES)
 	rm -f ${STYLE_OUT} ${STYLE_TMP}
+	cat ${CHINSTRAP}/chinstrap.less >> ${STYLE_TMP}
 	cat ${STYLE_FILES} >> ${STYLE_TMP}
 	${LESSC} ${STYLE_TMP} ${STYLE_OUT} --include-path="${CHINSTRAP}" --line-numbers="comments"
 ```
