@@ -1,44 +1,75 @@
-# Chinstrap
+# patchbay
 
-> Reusable styles for Indaba Music projects!
+> Replaces make: builds javascripts, templates, styles
 
-## Features
+```js
+var patchbay = require('patchbay')
+  , appDir = __dirname + '/app'
+```
+
+
+
+
+## Chinstrap Middleware
 
 * Integrates font-awesome
 * Can be easily extended with app specific styles
-* In dev mode, recompiles less at request time - no more busted CSS when waiting for the watcher / makefile to compile
-* In production mode, compiles once on startup and serves a cached version - app will crash if you have an error in your less files!
+* Caches compiled less in production
 
-
-## Drop it in!
 
 ```js
-app.use(require('chinstrap')())
+app.use(patchbay.middleware.chinstrap({
+  dir: appDir
+}))
 ```
 
-Now if you request `/chinstrap.css` you should get the compiled CSS
 
 
 
+## Templates
 
-## Extend
+* Wraps html in `<script type="text/ng-template" id="xxx"> </script>` block
+* id is set to the filename with `.html` removed
+* Removes need to make separate requests to load templates
+* Allows you to move templates around without changing `templateUrl` (of course, renaming the file will require editing `templateUrl`)
+* Caches compiled html in production
 
-If you specify a path, chinstrap will glob the directory for less files and include them in the compiled output:
 
 ```js
-app.use(require('chinstrap')(__dirname + '/app'))
+app.get('/', function(req, resp, next) {
+  patchbay.templates({
+    dir: __dirname + '/app'
+  }, onHtml)
+  function onHtml(err, html) {
+    if (err) return next(err)
+    resp.render('index', {templates: html})
+  }
+})
 ```
 
-now create a file `app/layout.less` with the contents:
 
-```css
 
-body {
-  background: @red;
-}
-a {
-  color: @blue;
-}
+
+
+
+## JS
+
+* Finds and concats all the javascript
+* Ensures that `index.js` is the first file in the output by convention
+* Caches compiled js in production
+
+
+```js
+app.get('/app.js', function(req, resp) {
+  patchbay.javascripts({
+    dir: __dirname + '/app'
+  }, onJs)
+  function onJs(err, js) {
+    if (err) throw err
+    resp.set('Content-Type', 'application/javascript')
+    resp.send(js)
+  }
+})
 ```
 
-And you will get a supremely ugly site!
+
