@@ -1,8 +1,8 @@
 {
-  "name": "chinstrap",
+  "name": "patchbay",
   "version": "0.0.0",
   "description": "Bootstrap for Indaba projects",
-  "main": "middleware.js",
+  "main": "index.js",
   "directories": {
     "example": "examples"
   },
