@@ -1,5 +1,4 @@
 
-angular.module('dorian-player', ['dorian-http'])
 .factory('player', ['$rootScope','http','$timeout',
            function( $rootScope , http , $timeout) {
 

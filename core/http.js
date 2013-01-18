@@ -1,4 +1,3 @@
-angular.module('dorian-http', [])
 .factory('http', function($http , $q , $rootScope , $cacheFactory) {
 
   var http = {}

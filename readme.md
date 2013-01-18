@@ -1,6 +1,5 @@
 # patchbay
 
-> Reusable project middleware
 
 ```js
 var patchbay = require('patchbay')
@@ -70,25 +69,35 @@ app.get('/app.js', patchbay.middleware.scripts({
 }))
 ```
 
+
 ---
+
 
 # Core
 
 
-## http
+* Add this to your server:
+
+```js
+app.get('/core.js', patchbay.middleware.core())
+```
 
 * Add this to your layout:
 
-```html
-<script src="/core/dorian-http.js"></script>
+```ejs
+<script src="/core.js"></script>
 ```
-* Include `dorian-http` as a dependency in your angular module:
+
+* Add this to your `index.js`:
 
 ```js
-angular.module('my-app', ['dorian-http'])
+angular.module('my-app', ['core'])
 ```
 
-* Use it in your controllers!
+
+
+## http
+
 
 ```js
 .controller('home-page', function($scope, http) {
@@ -106,8 +115,6 @@ angular.module('my-app', ['dorian-http'])
 * Add this to your layout:
 
 ```html
-  <script src="/core/dorian-http.js"></script>
-  <script src="/core/dorian-player.js"></script>
   <script src="/vendor/sm2/soundmanager2.js"></script>
   <script>
     soundManager.setup({
@@ -116,11 +123,6 @@ angular.module('my-app', ['dorian-http'])
   </script>
 ```
 
-* include `dorian-player` as a dependency:
-
-```js
-angular.module('my-app', ['dorian-player'])
-```
 
 * Use it in your controllers!
 
@@ -139,13 +141,6 @@ angular.module('my-app', ['dorian-player'])
 
 ```html
 <script src="/vendor/showdown.min.js"></script>
-<script src="/core/dorian-markdown.js"></script>
-```
-
-* Include dependency:
-
-```js
-angular.module('my-app', ['dorian-markdown'])
 ```
 
 * Use:
@@ -153,3 +148,5 @@ angular.module('my-app', ['dorian-markdown'])
 ```html
 <div ng-bind-html-unsafe="brief | markdown"></div>
 ```
+
+
