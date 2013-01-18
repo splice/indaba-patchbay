@@ -85,13 +85,13 @@ app.get('/app.js', patchbay.middleware.scripts({
 * Include `dorian-http` as a dependency in your angular module:
 
 ```js
-angular.module('facebook', ['dorian-http'])
+angular.module('my-app', ['dorian-http'])
 ```
 
 * Use it in your controllers!
 
 ```js
-.controller('facebook', function($scope, http) {
+.controller('home-page', function($scope, http) {
   http.get('/opportunities').then(function(opps) {
     $scope.opps = opps
   })
@@ -119,7 +119,7 @@ angular.module('facebook', ['dorian-http'])
 * include `dorian-player` as a dependency:
 
 ```js
-angular.module('facebook', ['dorian-player'])
+angular.module('my-app', ['dorian-player'])
 ```
 
 * Use it in your controllers!
@@ -130,4 +130,26 @@ angular.module('facebook', ['dorian-player'])
     player.play(audio)
   }
 })
+```
+
+
+## Markdown Filter
+
+* Add this to your layout:
+
+```html
+<script src="/vendor/showdown.min.js"></script>
+<script src="/core/dorian-markdown.js"></script>
+```
+
+* Include dependency:
+
+```js
+angular.module('my-app', ['dorian-markdown'])
+```
+
+* Use:
+
+```html
+<div ng-bind-html-unsafe="brief | markdown"></div>
 ```
