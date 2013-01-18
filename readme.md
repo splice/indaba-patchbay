@@ -1,6 +1,6 @@
 # patchbay
 
-> Replaces make: builds javascripts, templates, styles
+> Reusable project middleware
 
 ```js
 var patchbay = require('patchbay')
@@ -10,16 +10,19 @@ var patchbay = require('patchbay')
 
 
 
-## Chinstrap Middleware
+## Styles
 
-* Integrates font-awesome
-* Can be easily extended with app specific styles
-* Caches compiled less in production
+* Finds and concatinates all the less files
+* All bootstrap variables and mixins are available
+* Integrates Font Awesome and serves static font files
+* Caches css in production
 
 
 ```js
-app.use(patchbay.middleware.chinstrap({
-  dir: appDir
+app.use(express.static(patchbay.staticDir))
+
+app.get('/app.css', patchbay.middleware.styles({
+  dir: __dirname + '/app'
 }))
 ```
 
@@ -28,23 +31,25 @@ app.use(patchbay.middleware.chinstrap({
 
 ## Templates
 
+* Finds all the html files
 * Wraps html in `<script type="text/ng-template" id="xxx"> </script>` block
 * id is set to the filename with `.html` removed
 * Removes need to make separate requests to load templates
 * Allows you to move templates around without changing `templateUrl` (of course, renaming the file will require editing `templateUrl`)
+* Adds the concatinated templates to `resp.locals.patchbayTemplates`
 * Caches compiled html in production
 
 
 ```js
-app.get('/', function(req, resp, next) {
-  patchbay.templates({
-    dir: __dirname + '/app'
-  }, onHtml)
-  function onHtml(err, html) {
-    if (err) return next(err)
-    resp.render('index', {templates: html})
-  }
+app.get('/', patchbay.middleware.templates({dir: appDir}), function(req, resp, next) {
+  resp.render('index')
 })
+```
+
+In your ejs file:
+
+```ejs
+<%- patchbayTemplates %>
 ```
 
 
@@ -60,16 +65,9 @@ app.get('/', function(req, resp, next) {
 
 
 ```js
-app.get('/app.js', function(req, resp) {
-  patchbay.javascripts({
-    dir: __dirname + '/app'
-  }, onJs)
-  function onJs(err, js) {
-    if (err) throw err
-    resp.set('Content-Type', 'application/javascript')
-    resp.send(js)
-  }
-})
+app.get('/app.js', patchbay.middleware.scripts({
+  dir: __dirname + '/app'
+}))
 ```
 
 
