@@ -70,4 +70,64 @@ app.get('/app.js', patchbay.middleware.scripts({
 }))
 ```
 
+---
 
+# Core
+
+
+## http
+
+* Add this to your layout:
+
+```html
+<script src="/core/dorian-http.js"></script>
+```
+* Include `dorian-http` as a dependency in your angular module:
+
+```js
+angular.module('facebook', ['dorian-http'])
+```
+
+* Use it in your controllers!
+
+```js
+.controller('facebook', function($scope, http) {
+  http.get('/opportunities').then(function(opps) {
+    $scope.opps = opps
+  })
+})
+```
+
+
+
+
+## player
+
+* Add this to your layout:
+
+```html
+  <script src="/core/dorian-http.js"></script>
+  <script src="/core/dorian-player.js"></script>
+  <script src="/vendor/sm2/soundmanager2.js"></script>
+  <script>
+    soundManager.setup({
+      url: '/vendor/sm2'
+    })
+  </script>
+```
+
+* include `dorian-player` as a dependency:
+
+```js
+angular.module('facebook', ['dorian-player'])
+```
+
+* Use it in your controllers!
+
+```js
+.controller('listen-party', function($scope, player) {
+  $scope.play = function(audio) {
+    player.play(audio)
+  }
+})
+```
