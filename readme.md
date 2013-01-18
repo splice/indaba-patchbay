@@ -22,7 +22,7 @@ var patchbay = require('patchbay')
 app.use(express.static(patchbay.staticDir))
 
 app.get('/app.css', patchbay.middleware.styles({
-  dir: __dirname + '/app'
+  dir: appDir
 }))
 ```
 
@@ -66,7 +66,7 @@ In your ejs file:
 
 ```js
 app.get('/app.js', patchbay.middleware.scripts({
-  dir: __dirname + '/app'
+  dir: appDir
 }))
 ```
 
