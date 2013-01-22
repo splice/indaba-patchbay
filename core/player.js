@@ -5,27 +5,24 @@
 
   var player = {}
 
-  player.play = function(audio) {
+  player.playSubmission = function(audio) {
     if (!audio.preview_url) throw new Error("player: preview_url is required");
-    soundManager.onready(function() {
-      soundManager.stopAll()
-
-      player.sound = soundManager.createSound({
-        id: audio.id,
-        url: audio.preview_url,
-        autoLoad: true,
-        autoPlay: true
-      });
-
-      player.sound.play({
-      });
-
-    });
+    player.data = {
+      duration: audio.duration,
+      waveform_url: audio.waveform_url,
+      artwork_url: audio.user.image_urls.detail,
+    }
+    playAudio(audio)
   };
 
-  setInterval(function() {
-    $rootScope.$digest()
-  }, 1000)
+  player.playReferenceAudio = function(audio) {
+    player.data = {
+      duration: audio.duration,
+      waveform_url: audio.waveform_url,
+      artwork_url: audio.image_url,
+    }
+    playAudio(audio)
+  }
 
   player.stopAll = function() {
     soundManager.stopAll()
@@ -38,9 +35,32 @@
         && !player.sound.paused
   }
 
-  player.position
 
   return player;
+
+
+
+  function playAudio(audio) {
+    soundManager.onready(function() {
+      soundManager.stopAll()
+
+      player.sound = soundManager.createSound({
+        id: audio.id,
+        url: audio.preview_url,
+        autoLoad: true,
+        autoPlay: true
+      });
+
+      player.sound.play({
+        whileplaying: function() {
+          player.sound.percent = this.position / player.data.duration * 100
+          $rootScope.$digest()
+        }
+      });
+
+    });
+  }
+
 
 }])
 
