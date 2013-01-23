@@ -5,7 +5,7 @@
 
   var player = {}
 
-  player.playSubmission = function(audio) {
+  player.playSubmission = function(audio, opts) {
     if (!audio.preview_url) throw new Error("player: preview_url is required");
     player.data = {
       duration: audio.duration,
@@ -16,10 +16,10 @@
       artist_url: 'http://www.indabamusic.com/people/' + audio.user.slug,
       name: audio.name,
     }
-    playAudio(audio)
+    playAudio(audio, opts)
   };
 
-  player.playReferenceAudio = function(audio) {
+  player.playReferenceAudio = function(audio, opts) {
     player.data = {
       duration: audio.duration,
       waveform_url: audio.waveform_url,
@@ -28,7 +28,7 @@
       name: audio.name,
     }
     // need `artist` and `artist_url` for a reference audio
-    playAudio(audio)
+    playAudio(audio, opts)
   }
 
   player.stopAll = function() {
@@ -47,23 +47,29 @@
 
 
 
-  function playAudio(audio) {
+  function playAudio(audio, opts) {
     soundManager.onready(function() {
       soundManager.stopAll()
 
-      player.sound = soundManager.createSound({
+      opts = opts || {}
+      opts = _.defaults(opts, {
         id: audio.id,
         url: audio.preview_url,
         autoLoad: true,
-        autoPlay: true
-      });
-
-      player.sound.play({
+        autoPlay: true,
         whileplaying: function() {
           player.sound.percent = this.position / player.data.duration * 100
           $rootScope.$digest()
-        }
-      });
+        },
+      })
+
+      player.sound = soundManager.createSound(opts)
+
+      if (opts.autoPlay) {
+        player.sound.play();
+      }
+
+
 
     });
   }
