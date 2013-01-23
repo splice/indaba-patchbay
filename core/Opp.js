@@ -24,6 +24,10 @@
       return 'winners'
   }
 
+  Opp.inVoting = function(opp) {
+    return (inPast(opp.voting_start_date) && inFuture(opp.voting_end_date))
+  }
+
   return Opp
 
 })
