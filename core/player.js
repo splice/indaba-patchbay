@@ -8,6 +8,7 @@
   player.playSubmission = function(audio, opts) {
     if (!audio.preview_url) throw new Error("player: preview_url is required");
     player.data = {
+      id: audio.id,
       duration: audio.duration,
       waveform_url: audio.waveform_url,
       artwork_url: audio.user.image_urls.detail,
@@ -21,6 +22,7 @@
 
   player.playReferenceAudio = function(audio, opts) {
     player.data = {
+      id: audio.id,
       duration: audio.duration,
       waveform_url: audio.waveform_url,
       artwork_url: audio.image_url,
@@ -61,6 +63,10 @@
           player.sound.percent = this.position / player.data.duration * 100
           $rootScope.$digest()
         },
+        onfinish: function() {
+          $rootScope.$broadcast('playerFinished');
+          $rootScope.$digest();
+        }
       })
 
       player.sound = soundManager.createSound(opts)
