@@ -38,7 +38,8 @@
   }
 
   player.isPlaying = function(audio) {
-    return player.sound
+    return audio
+        && player.sound
         && player.sound.id === audio.id
         && player.sound.playState === 1
         && !player.sound.paused
