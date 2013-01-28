@@ -107,6 +107,7 @@
       }
 
 
+      $rootScope.$broadcast('playerSongChanged')
 
     });
   }
