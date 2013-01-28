@@ -7,21 +7,30 @@
 
   player.playSubmission = function(audio, opts) {
     if (!audio.preview_url) throw new Error("player: preview_url is required");
+
     player.data = {
+      type: 'submission',
       id: audio.id,
       duration: audio.duration,
       waveform_url: audio.waveform_url,
       artwork_url: audio.user.image_urls.detail,
       play_count: audio.play_count,
+      user: audio.user,
       artist: audio.user.name,
       artist_url: 'http://www.indabamusic.com/people/' + audio.user.slug,
       name: audio.name,
+      description: audio.description,
+
+
+      submission: audio
     }
     playAudio(audio, opts)
   };
 
   player.playReferenceAudio = function(audio, opts) {
     player.data = {
+      type: 'reference_audio',
+
       id: audio.id,
       duration: audio.duration,
       waveform_url: audio.waveform_url,
@@ -32,6 +41,27 @@
     // need `artist` and `artist_url` for a reference audio
     playAudio(audio, opts)
   }
+
+  player.playOppReferenceAudio = function(opp, opts) {
+    var audio = opp.reference_audio
+
+    player.data = {
+      type: 'opp_reference_audio',
+
+      id: audio.id,
+      duration: audio.duration,
+      waveform_url: audio.waveform_url,
+      artwork_url: audio.image_url,
+      play_count: audio.play_count,
+      name: audio.name,
+
+      opp: opp
+    }
+
+    // need `artist` and `artist_url` for a reference audio
+    playAudio(audio, opts)
+  }
+
 
   player.stopAll = function() {
     soundManager.stopAll()
