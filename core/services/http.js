@@ -1,11 +1,11 @@
 .factory('http', function($http , $q , $rootScope , $cacheFactory) {
 
   var http = {}
-  var endpoint = http.endpoint = 'https://lydian.indabamusic.com'
+  http.endpoint = 'https://lydian.indabamusic.com'
 
   // get
   http.get = function(url, config) {
-    url = endpoint + url;
+    url = http.endpoint + url;
 
     config = (config || {})
     if (http.token) {
@@ -27,7 +27,7 @@
 
   // post
   http.post = function(url, dataObject, config) {
-    url = endpoint + url
+    url = http.endpoint + url
     dataObject = (dataObject || {})
 
     config = (config || {})
