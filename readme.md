@@ -70,83 +70,9 @@ app.get('/app.js', patchbay.middleware.scripts({
 ```
 
 
----
 
+## Demo
 
-# Core
-
-
-* Add this to your server:
-
-```js
-app.get('/core.js', patchbay.middleware.core())
 ```
-
-* Add this to your layout:
-
-```ejs
-<script src="/core.js"></script>
+node server.js
 ```
-
-* Add this to your `index.js`:
-
-```js
-angular.module('my-app', ['core'])
-```
-
-
-
-## http
-
-
-```js
-.controller('home-page', function($scope, http) {
-  http.get('/opportunities').then(function(opps) {
-    $scope.opps = opps
-  })
-})
-```
-
-
-
-
-## player
-
-* Add this to your layout:
-
-```html
-  <script src="/vendor/sm2/soundmanager2.js"></script>
-  <script>
-    soundManager.setup({
-      url: '/vendor/sm2'
-    })
-  </script>
-```
-
-
-* Use it in your controllers!
-
-```js
-.controller('listen-party', function($scope, player) {
-  $scope.play = function(audio) {
-    player.play(audio)
-  }
-})
-```
-
-
-## Markdown Filter
-
-* Add this to your layout:
-
-```html
-<script src="/vendor/showdown.min.js"></script>
-```
-
-* Use:
-
-```html
-<div ng-bind-html-unsafe="brief | markdown"></div>
-```
-
-
